@@ -17,15 +17,11 @@ public class GameObject {
 	}
 	
 	void update() {
-		y += 20;
-		if(y >= 800) {
-			y = -(this.height);
-			x += 3;
-		}
+
 	}
 	
 	void draw(Graphics g){
-		g.fillRect(x,y,100,100);
+
 	}
 	
 }
