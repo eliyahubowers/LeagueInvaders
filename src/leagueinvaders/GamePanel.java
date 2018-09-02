@@ -26,9 +26,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	Font restartFont;
 		
 	RocketShip rs;
+	ObjectManager om;
 	
 	GamePanel(){
 		rs = new RocketShip(250,700,50,50);
+		om = new ObjectManager(rs);
 		t = new Timer(1000/60,this);
 		titleFont = new Font("Arial",Font.PLAIN,53);
 		instructFont = new Font("Arial",Font.PLAIN,25);
@@ -44,7 +46,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 				
 	}	
 	void updateGameState(){
-		rs.update();		
+		om.update();	
 	}
 	void updateEndState(){
 				
@@ -62,7 +64,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	void drawGameState(Graphics g){
 		g.setColor(Color.BLACK);	
 		g.fillRect(0, 0, 500, 800);	
-		rs.draw(g);
+		om.draw(g);
+		om.update();
 	}	
 	void drawEndState(Graphics g){
 		g.setColor(Color.RED);	
@@ -106,6 +109,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_W) {
+			rs.directiony = 2;
+		}else if(e.getKeyCode() == KeyEvent.VK_S) {
+			rs.directiony = 1;
+		}else if(e.getKeyCode() == KeyEvent.VK_A) {
+			rs.directionx = 2;
+		}else if(e.getKeyCode() == KeyEvent.VK_D) {
+			rs.directionx = 1;
+		}
+		
+		rs.update();
 		
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 
@@ -124,6 +138,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		System.out.println("work");
+		System.out.println("end");
+		rs.directionx = 0;
+		rs.directiony = 0;
 	}
 }
