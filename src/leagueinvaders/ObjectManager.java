@@ -8,7 +8,7 @@ public class ObjectManager {
 	
 	ArrayList<Projectile> projectiles;
 	ArrayList<Alien> aliens;
-	RocketShip rS;
+	RocketShip rS;	
 	
 	ObjectManager(RocketShip rS){
 		this.rS = rS;
@@ -43,7 +43,8 @@ public class ObjectManager {
     public void manageEnemies(){
         if(System.currentTimeMillis() - enemyTimer >= enemySpawnTime){
                 addAlien(new Alien(new Random().nextInt(500), 0, 50, 50));
-
+                
+                enemySpawnTime = new Random().nextInt(2000); 
                 enemyTimer = System.currentTimeMillis();
         }
    }
