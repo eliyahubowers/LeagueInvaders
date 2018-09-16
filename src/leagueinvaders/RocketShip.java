@@ -17,6 +17,7 @@ public class RocketShip extends GameObject{
 	}
 	
 	void update(){
+		super.update();
 		if(directionx == 1) {
 		    this.x += 5;
 		}else if(directionx == 2) {

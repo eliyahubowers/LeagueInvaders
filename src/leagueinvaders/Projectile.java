@@ -13,12 +13,11 @@ public class Projectile extends GameObject{
 	}
 	
 	void update() {
+		super.update();
 		if(this.y <= 0) {
 			this.isAlive = false;
 		}
 			this.y -= speed;
-			width -= 2;
-		width = 10;
 	}
 	
 	void draw(Graphics g) {
