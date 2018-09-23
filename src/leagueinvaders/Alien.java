@@ -7,7 +7,7 @@ import java.util.Random;
 public class Alien extends GameObject{
 	
 	int speed;
-	int direction;
+	double direction;
 	
 	Alien(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -15,23 +15,22 @@ public class Alien extends GameObject{
 	}
 		
 	void draw(Graphics g) {
-        g.setColor(Color.YELLOW);
-        g.fillRect(x, y, width, height);       
+		g.drawImage(GamePanel.alienImg, x, y, width, height, null);     
 	}
 	
 	void update() {
 		super.update();
 		this.y += speed;
-		if(this.direction <= 2) {
 		this.direction -= new Random().nextInt(2);
 		this.direction += new Random().nextInt(2);
-		}
 		this.x += direction;
 		if(this.y >= 800 ) {
 			this.isAlive = false;
 		}
-		if(this.x < 0 || this.x > 500-width) {
-			this.direction = direction*-1;
+		if(this.x < 0) {
+			this.direction = direction*-.1;
+		}else if(this.x > 500-width) {
+			this.direction = direction*-.1;
 		}
 	}
 	

@@ -7,7 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -25,6 +28,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	Font deathFont;
 	Font restartFont;
 		
+    public static BufferedImage alienImg;
+
+    public static BufferedImage rocketImg;
+
+    public static BufferedImage bulletImg;
+
+    public static BufferedImage spaceImg;
+	
 	RocketShip rs;
 	ObjectManager om;
 	
@@ -36,6 +47,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		instructFont = new Font("Arial",Font.PLAIN,25);
 		deathFont = new Font("Arial",Font.PLAIN,53);
 		restartFont = new Font("Arial",Font.BOLD,25);
+		 try {
+             alienImg = ImageIO.read(this.getClass().getResourceAsStream("alien.png"));
+             rocketImg = ImageIO.read(this.getClass().getResourceAsStream("rocket.png"));
+             bulletImg = ImageIO.read(this.getClass().getResourceAsStream("bullet.png"));
+             spaceImg = ImageIO.read(this.getClass().getResourceAsStream("space.png"));
+         } catch (IOException e) {
+             // TODO Auto-generated catch block
+             e.printStackTrace();
+         }
 	}
 	
 	void startGame() {
@@ -48,7 +68,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	void updateGameState(){
 		om.update();	
 		om.manageEnemies();
-		//om.checkCollision();
+		om.checkCollision();
 		om.purgeObjects();
 		if(rs.isAlive == false) {
 			currentState = END_STATE;
@@ -68,8 +88,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		g.drawString("Press SPACE for instructions", 80, 500);
 	}	
 	void drawGameState(Graphics g){
-		g.setColor(Color.BLACK);	
-		g.fillRect(0, 0, 500, 800);	
+		g.drawImage(GamePanel.spaceImg, 0, 0, 500, 800, null);	
 		om.draw(g);
 		om.update();
 	}	
@@ -80,7 +99,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		g.setFont(deathFont);
 		g.drawString("GAME OVER", 80, 200);
 		g.setFont(restartFont);
-		g.drawString("You killed " + 1 + " enemies", 125, 400);
+		g.drawString("You killed " + om.getScore() + " enemies", 125, 400);
 		g.drawString("press ENTER to restart", 120, 500);
 		
 	}
@@ -127,10 +146,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		
 		rs.update();
 		
-		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-	        om.addProjectile(new Projectile(rs.x+(rs.width/2)-5, rs.y, 10, 10));
-		}
-		
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 
 	    if(currentState == MENU_STATE){
@@ -140,6 +155,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
         	   currentState = END_STATE;
         }else if(currentState == END_STATE){
             currentState = MENU_STATE;
+            rs = new RocketShip(250,700,50,50);
+            om = new ObjectManager(rs);
         }
 	    
 		}
@@ -151,5 +168,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		System.out.println("end");
 		rs.directionx = 0;
 		rs.directiony = 0;
+		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+	        om.addProjectile(new Projectile(rs.x+(rs.width/2)-5, rs.y, 10, 10));
+		}
 	}
 }
